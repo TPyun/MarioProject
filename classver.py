@@ -231,7 +231,7 @@ class Mario:
             i += 1
             if keepJump is True:
                 moreHigher += 3
-                i -= 0.5
+                i -= 0.5 #더 점프할 시 하강속도 문제로 i 강제로 줄임
             else:
                 pass
         if i == 49.5 or i == 50:
