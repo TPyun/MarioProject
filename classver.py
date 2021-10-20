@@ -165,7 +165,7 @@ class Ground:
             self.groundLong.draw(x + 1500, 30)
             self.groundShort.draw(x + 700, 103)
         else:
-            self.groundLong.draw(790, 30)
+            self.groundLong.draw(1500, 30)
             self.groundShort.draw(700, 103)
 
 
