@@ -300,12 +300,13 @@ while running:
     timeUi.update()
 
     print(jump, keepJump, i)
-
+    
+    print_fps()
     monster.draw()
     mario.draw()
     bgm.play()
 
     update_canvas()
-    delay(0.01)
+    delay(0.00005)
 
 close_canvas()
