@@ -1,8 +1,11 @@
+# ---NOT USEFUL---
+
 import character
 import ui
 import background
 import terrain
 import monsters
+
 
 from pico2d import *
 

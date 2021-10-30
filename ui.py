@@ -15,7 +15,7 @@ class TimeUi:
         self.image8 = load_image('images/number/clock/w8.png')
         self.image9 = load_image('images/number/clock/w9.png')
 
-    def update(self):
+    def draw(self):
         global setTime
         global leftTime
         setTime = 250
