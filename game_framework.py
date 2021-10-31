@@ -1,3 +1,6 @@
+import hint
+
+
 class GameState:
     def __init__(self, state):
         self.enter = state.enter
@@ -83,6 +86,7 @@ def run(start_state):
     stack = [start_state]
     start_state.enter()
     while running:
+        hint.show()
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()

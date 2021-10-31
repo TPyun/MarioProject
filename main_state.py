@@ -56,9 +56,9 @@ def handle_events():
 def update():
     mario.update()
     # background1.update()
-    # ground.update()
+    ground.update()
     monster.update()
-    # timeUi.update()
+    timeUi.update()
     bgm.update()
 
 

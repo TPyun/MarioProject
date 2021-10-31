@@ -1,5 +1,14 @@
 from pico2d import *
+import character
+import game_framework
+import start_state
+import title_state
+import main_state
 
+setTime = 250
+readyTime = 0
+leftTime = setTime
+i = 1
 
 class TimeUi:
     def __init__(self):
@@ -15,11 +24,18 @@ class TimeUi:
         self.image8 = load_image('images/number/clock/w8.png')
         self.image9 = load_image('images/number/clock/w9.png')
 
-    def draw(self):
+    def update(self):
         global setTime
         global leftTime
-        setTime = 250
-        leftTime = str(setTime - int(get_time()))
+        global readyTime # mainstate 진입 후 시간 세기위한 장치
+        global i
+        # if character.x != 0 or character.jumpHeight != 0:
+        if character.Mario and i == 1:
+            readyTime = get_time()
+            i = 0
+        leftTime = str(setTime - int(get_time()) + readyTime)
+
+    def draw(self):
         self.imageClock.draw(680, 570)
         if leftTime[0] == str(1):
             self.image1.draw(710, 570)

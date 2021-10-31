@@ -39,8 +39,6 @@ def handle_events():
                 charDir = 0
                 stopSide = -1
 
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
             jump = True
         elif event.type == SDL_KEYUP and event.key == SDLK_w:
@@ -48,6 +46,7 @@ def handle_events():
     pass
 
 
+realXLocation = 0
 x = 0
 characterAniSpeed = 1  # 캐릭터 애니 사진 넘어가는 속도 변수
 frame = 0  # 캐릭터 애니사진 파일 움직이기 위한 용도
@@ -77,6 +76,8 @@ class Mario:
         global i
         global moreHigher
         global keepJump
+        global realXLocation
+        realXLocation = x * -1
         if jump:
             t = i / 50
             jumpHeight = (2 * t ** 2 - 3 * t + 1) * 0 + (-4 * t ** 2 + 4 * t) * (highestJumpHeight + moreHigher) + (
