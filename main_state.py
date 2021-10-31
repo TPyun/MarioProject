@@ -5,7 +5,7 @@ import ui
 import background
 import terrain
 import monsters
-
+import start_state
 
 name = "MainState"
 
@@ -16,29 +16,33 @@ ground = None
 timeUi = None
 bgm = None
 font = None
+sg = None
+nbr = None
 
 
 def enter():
-    global mario, monster, background1, ground, timeUi, bgm
+    global mario, monster, background1, ground, timeUi, bgm, sg, nbr
     background1 = background.Background()
     bgm = background.Bgm()
     ground = terrain.Ground()
+    sg = terrain.ShortGround()
+    nbr = terrain.Brick()
     monster = monsters.Monster()
     mario = character.Mario()
     timeUi = ui.TimeUi()
 
 
 def exit():
-    # global boy, grass
-    # del(boy)
-    # del(grass)
-    global mario, monster, background1, ground, timeUi, bgm
+
+    global mario, monster, background1, ground, timeUi, bgm, sg, nbr
     del(mario)
     del(monster)
     del(background1)
     del(ground)
+    del(sg)
     del(timeUi)
     del(bgm)
+    del(nbr)
 
 
 def pause():
@@ -67,7 +71,9 @@ def draw():
 
     background1.draw()
     ground.draw()
+    sg.draw()
     monster.draw()
+    nbr.draw()
     mario.draw()
     timeUi.draw()
     update_canvas()
