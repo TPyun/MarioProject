@@ -10,7 +10,7 @@ import start_state
 name = "MainState"
 
 mario = None
-monster = None
+# monster = None
 background1 = None
 ground = None
 timeUi = None
@@ -18,25 +18,28 @@ bgm = None
 font = None
 sg = None
 nbr = None
+somemonsters = None
 
 
 def enter():
-    global mario, monster, background1, ground, timeUi, bgm, sg, nbr
+    global mario, background1, ground, timeUi, bgm, sg, nbr, somemonsters
     background1 = background.Background()
     bgm = background.Bgm()
     ground = terrain.Ground()
     sg = terrain.ShortGround()
     nbr = terrain.Brick()
-    monster = monsters.Monster()
+    # monster = monsters.Monster()
+    somemonsters = [monsters.Monster() for i in range(10)]
     mario = character.Mario()
     timeUi = ui.TimeUi()
 
 
 def exit():
 
-    global mario, monster, background1, ground, timeUi, bgm, sg, nbr
+    global mario, background1, ground, timeUi, bgm, sg, nbr, somemonsters
     del(mario)
-    del(monster)
+    # del(monster)
+    del(somemonsters)
     del(background1)
     del(ground)
     del(sg)
@@ -61,7 +64,9 @@ def update():
     mario.update()
     # background1.update()
     ground.update()
-    monster.update()
+    # monster.update()
+    for monsters.monster in somemonsters:
+        monsters.monster.update()
     timeUi.update()
     bgm.update()
 
@@ -72,7 +77,9 @@ def draw():
     background1.draw()
     ground.draw()
     sg.draw()
-    monster.draw()
+    # monster.draw()
+    for monsters.monster in somemonsters:
+        monsters.monster.draw()
     nbr.draw()
     mario.draw()
     timeUi.draw()

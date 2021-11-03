@@ -10,6 +10,7 @@ readyTime = 0
 leftTime = setTime
 i = 1
 
+
 class TimeUi:
     def __init__(self):
         self.imageClock = load_image('images/number/clock/clock.png')
