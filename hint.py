@@ -5,6 +5,5 @@ import terrain
 import ui
 
 
-
 def show():
-    print(character.realXLocation, terrain.buildLocation)
+    print(character.realXLocation, terrain.buildLocation, terrain.plus, monsters.spawnBlock, monsters.Monster().monsterX)

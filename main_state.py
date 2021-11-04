@@ -29,7 +29,7 @@ def enter():
     sg = terrain.ShortGround()
     nbr = terrain.Brick()
     # monster = monsters.Monster()
-    somemonsters = [monsters.Monster() for i in range(10)]
+    somemonsters = [monsters.Monster() for i in range(5)]
     mario = character.Mario()
     timeUi = ui.TimeUi()
 
