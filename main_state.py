@@ -33,7 +33,6 @@ def enter():
     mario = character.Mario()
     timeUi = ui.TimeUi()
 
-
 def exit():
 
     global mario, background1, ground, timeUi, bgm, sg, nbr, somemonsters

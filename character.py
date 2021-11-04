@@ -69,6 +69,7 @@ class Mario:
         self.imageR = load_image('images/marioAniRight1.png')
         self.imageStandR.draw(300, groundHeight + jumpHeight)
         self.frame = 0
+        self.die = False
 
     def update(self):
         global jump
