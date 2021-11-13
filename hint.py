@@ -6,4 +6,5 @@ import ui
 
 
 def show():
-    print(character.realXLocation, monsters.Monster().monsterX + character.leftEndMove + character.x, character.jumpHeight, character.Mario().die)
+    # print(character.realXLocation, monsters.Monster().monsterX + character.leftEndMove + character.x, character.jumpHeight, character.Mario().die)
+    pass

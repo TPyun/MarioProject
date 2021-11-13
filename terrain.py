@@ -41,11 +41,16 @@ class ShortGround:
 class Brick:
     def __init__(self):
         self.image = load_image('images/wall/normalwall.png') # 50*50
-        self.stickbrick = random.randint(0, 1)
-        self.x = random.randint(0, 3000)
+        self.buildLocation = random.randrange(50, 2000, 50)
+        self.sticked = random.randint(0, 1)
 
     def draw(self):
-        # if self.stickbrick is 0:
+        if 2197 <= character.realXLocation % 3000 <= 2200:
+            self.buildLocation = random.randrange(50 + 3000 * (monsters.spawnBlock - 1),
+                                                  3000 * (monsters.spawnBlock - 1) + 2000, 50)
 
-        self.image.draw(buildLocation - 3000, 300)
-        self.image.draw(buildLocation, 300)
+        # print(self.buildLocation)
+        # print(character.realXLocation)
+
+        self.image.draw(self.buildLocation - character.realXLocation + character.leftEndMove, 300)
+        self.image.draw(self.buildLocation - character.realXLocation + character.leftEndMove + 3000, 300)

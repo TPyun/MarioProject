@@ -17,25 +17,26 @@ timeUi = None
 bgm = None
 font = None
 sg = None
-nbr = None
+# nbr = None
 somemonsters = None
-
+allbricks = None
 
 def enter():
-    global mario, background1, ground, timeUi, bgm, sg, nbr, somemonsters
+    global mario, background1, ground, timeUi, bgm, sg, somemonsters, allbricks
     background1 = background.Background()
     bgm = background.Bgm()
     ground = terrain.Ground()
     sg = terrain.ShortGround()
-    nbr = terrain.Brick()
+    # nbr = terrain.Brick()
+    allbricks = [terrain.Brick() for i in range(10)]
     # monster = monsters.Monster()
-    somemonsters = [monsters.Monster() for i in range(5)]
+    somemonsters = [monsters.Monster() for i in range(1)]
     mario = character.Mario()
     timeUi = ui.TimeUi()
 
 def exit():
 
-    global mario, background1, ground, timeUi, bgm, sg, nbr, somemonsters
+    global mario, background1, ground, timeUi, bgm, sg, somemonsters, allbricks
     del(mario)
     # del(monster)
     del(somemonsters)
@@ -44,7 +45,8 @@ def exit():
     del(sg)
     del(timeUi)
     del(bgm)
-    del(nbr)
+    # del(nbr)
+    del(allbricks)
 
 
 def pause():
@@ -79,7 +81,8 @@ def draw():
     # monster.draw()
     for monsters.monster in somemonsters:
         monsters.monster.draw()
-    nbr.draw()
+    for terrain.brick in allbricks:
+        terrain.brick.draw()
     mario.draw()
     timeUi.draw()
     update_canvas()
