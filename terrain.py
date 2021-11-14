@@ -29,19 +29,22 @@ class Ground:
 
 class ShortGround:
     def __init__(self):
-        self.image = load_image('images/groundShort.png') # 100 * 73
+    #   self.image = load_image('images/groundShort.png') # 100 * 73
+        pass
 
     def draw(self):
-        if character.leftEnd is False:
-            self.image.draw(character.x + 700, 103)
-        else:
-            self.image.draw(700, 103)
+        # if character.leftEnd is False:
+        #     self.image.draw(character.x + 700, 103)
+        # else:
+        #     self.image.draw(700, 103)
+        pass
 
 
 class Brick:
     def __init__(self):
         self.image = load_image('images/wall/normalwall.png') # 50*50
-        self.buildLocation = random.randrange(50, 2000, 50)
+        self.buildLocation = random.randrange(50, 2300, 50)
+        self.buildHeight = random.randrange(250, 400, 50)
         self.sticked = random.randint(0, 1)
 
     def draw(self):
@@ -52,5 +55,5 @@ class Brick:
         # print(self.buildLocation)
         # print(character.realXLocation)
 
-        self.image.draw(self.buildLocation - character.realXLocation + character.leftEndMove, 300)
-        self.image.draw(self.buildLocation - character.realXLocation + character.leftEndMove + 3000, 300)
+        self.image.draw(self.buildLocation - character.realXLocation + character.leftEndMove, self.buildHeight)
+        self.image.draw(self.buildLocation - character.realXLocation + character.leftEndMove + 3000, self.buildHeight)

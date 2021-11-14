@@ -2,6 +2,7 @@ from pico2d import *
 
 import game_framework
 import title_state
+import monsters
 
 PIXEL_PER_METER = (10.0 / 0.15)
 RUN_SPEED_KMPH = 15.0
@@ -85,7 +86,6 @@ class Mario:
         self.imageStandR.draw(300, groundHeight + jumpHeight)
         self.frame = 0
 
-
     def update(self):
         global jump
         global jumpHeight
@@ -135,11 +135,14 @@ class Mario:
         elif stopSide == -1 and charDir == 0:
             self.imageStandL.draw(300 + leftEndMove, 100 + jumpHeight)
 
+        # if monsters.Monster().stuckwith is False:
         frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 21 # 마리오 사진 넘기기
 
+        # if monsters.Monster().stuckwith:
+        #     frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 40
+        # print(monsters.Monster().stuckwith)
         x += velocity * game_framework.frame_time
 
-        print(x, "//", RUN_SPEED_PPS, "//",velocity, "//",game_framework.frame_time)
         if x < 0:  # 왼쪽 끝으로 가면 배경이 멈추고 캐릭터가 직접 움직인다
             leftEnd = False
         if x >= 0:

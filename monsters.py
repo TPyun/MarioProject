@@ -1,6 +1,7 @@
 import character
 import random
 import main_state
+import title_state
 
 from pico2d import *
 
@@ -27,16 +28,17 @@ class Monster:
         global spawnBlock
         global monsterAniSpeed
 
-        if -1 * character.x - 40 <= self.monsterX + character.leftEndMove - 300 <= -1 * character.x + 40 and self.stuckwith is False:
+        # 마리오와 굼바 상호작용
+        if -1 * character.x - 40 <= self.monsterX + character.leftEndMove - 300 <= -1 * character.x + 40 and character.jumpHeight < 20 and self.stuckwith is False:
             character.leftLife -= 1
-            self.stuckwith = True
-
-        if self.stuckwith is True:
-            self.r += 1
-
-        if self.r == 100:
-            self.r = 0
-            self.stuckwith = False
+        #     self.stuckwith = True
+        #
+        # if self.stuckwith is True:
+        #     self.r += 1
+        #
+        # if self.r == 100:
+        #     self.r = 0
+        #     self.stuckwith = False
 
         monsterAniSpeed += 1
         if monsterAniSpeed % 7 == 0: # 속도조절장치인데 소수만 입력 가능함. 아니면 몇놈만 정해져서 프레임 안넘어감
@@ -45,14 +47,14 @@ class Monster:
         spawnBlock = ((character.realXLocation + 800) // 3000 + 1)  # 800쓴 이유는 3000배수에서 2200을 넘기면 한칸 넘김
 
         if 2197 <= character.realXLocation % 3000 <= 2200:
-            main_state.somemonsters = [Monster() for i in range(5)]
+            main_state.somemonsters = [Monster() for i in range(title_state.difficulty * 3)]
             self.frame = random.randint(0, 3)
 
         if character.realXLocation >= 2200 and self.over2200 is False:
             self.monsterX = random.randint(3000 * (spawnBlock - 1) + 200, 3000 * spawnBlock - 1000)
             self.over2200 = True
 
-        self.monsterX += 0.5 * self.dir
+        self.monsterX += 0.5 * self.dir * spawnBlock * 0.5
         self.i += 1
         if self.i > 1000:
             self.dir *= -1

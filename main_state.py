@@ -5,6 +5,7 @@ import ui
 import background
 import terrain
 import monsters
+import title_state
 import start_state
 
 name = "MainState"
@@ -32,7 +33,7 @@ def enter():
     # nbr = terrain.Brick()
     allbricks = [terrain.Brick() for i in range(10)]
     # monster = monsters.Monster()
-    somemonsters = [monsters.Monster() for i in range(1)]
+    somemonsters = [monsters.Monster() for i in range(title_state.difficulty * 3)]
     mario = character.Mario()
     timeUi = ui.TimeUi()
     life = ui.Life()
