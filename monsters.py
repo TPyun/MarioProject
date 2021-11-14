@@ -1,7 +1,7 @@
 import character
 import random
 import main_state
-import terrain
+
 from pico2d import *
 
 
@@ -18,7 +18,8 @@ class Monster:
         self.frame = random.randint(0, 3)
         self.monsterX = random.randint(1000, 1900)
         self.over2200 = False
-
+        self.stuckwith = False
+        self.r = 0
         self.i = 0
         self.dir = -1
 
@@ -26,9 +27,16 @@ class Monster:
         global spawnBlock
         global monsterAniSpeed
 
-        if -1 * character.x - 40 <= self.monsterX + character.leftEndMove - 300 <= -1 * character.x + 40:
-            print("mariodie")
+        if -1 * character.x - 40 <= self.monsterX + character.leftEndMove - 300 <= -1 * character.x + 40 and self.stuckwith is False:
+            character.leftLife -= 1
+            self.stuckwith = True
 
+        if self.stuckwith is True:
+            self.r += 1
+
+        if self.r == 100:
+            self.r = 0
+            self.stuckwith = False
 
         monsterAniSpeed += 1
         if monsterAniSpeed % 7 == 0: # 속도조절장치인데 소수만 입력 가능함. 아니면 몇놈만 정해져서 프레임 안넘어감
@@ -49,9 +57,6 @@ class Monster:
         if self.i > 1000:
             self.dir *= -1
             self.i = 0
-
-
-
 
     def draw(self):
         global monsterAniSpeed

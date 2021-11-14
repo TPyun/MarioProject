@@ -102,3 +102,27 @@ class TimeUi:
             self.image8.draw(770, 570)
         elif leftTime[2] == str(9):
             self.image9.draw(770, 570)
+
+
+class Life:
+    def __init__(self):
+        self.ima1 = load_image('images/life/l1.png')
+        self.ima2 = load_image('images/life/l2.png')
+        self.ima3 = load_image('images/life/l3.png')
+        self.ima4 = load_image('images/life/l4.png')
+        self.ima5 = load_image('images/life/l5.png')
+
+    def update(self):
+        pass
+
+    def draw(self):
+        if character.leftLife == 1:
+            self.ima1.draw(80, 560)
+        if character.leftLife == 2:
+            self.ima2.draw(80, 560)
+        if character.leftLife == 3:
+            self.ima3.draw(80, 560)
+        if character.leftLife == 4:
+            self.ima4.draw(80, 560)
+        if character.leftLife == 5:
+            self.ima5.draw(80, 560)

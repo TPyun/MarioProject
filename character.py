@@ -3,9 +3,20 @@ from pico2d import *
 import game_framework
 import title_state
 
+PIXEL_PER_METER = (10.0 / 0.15)
+RUN_SPEED_KMPH = 15.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 21
+
 running = True
 keepJump = True
 charDir = 0  # -1이면 왼쪽으로 +1이면 오른쪽 방향으로 움직인다.
+velocity = 0
 
 
 def handle_events():
@@ -14,6 +25,7 @@ def handle_events():
     global charDir
     global jump
     global keepJump
+    global velocity
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -23,22 +35,24 @@ def handle_events():
 
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
             charDir = 1
+            velocity -= RUN_SPEED_PPS
         elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
             charDir = -1
-
+            velocity += RUN_SPEED_PPS
         elif event.type == SDL_KEYUP and event.key == SDLK_d:
             if charDir == -1:  # a,d 동시입력하다가 손떼면 가던 방향 계속 갈수 있게끔
                 charDir = -1
             else:
                 charDir = 0
                 stopSide = 1
+                velocity += RUN_SPEED_PPS
         elif event.type == SDL_KEYUP and event.key == SDLK_a:
             if charDir == 1:
                 charDir = 1
             else:
                 charDir = 0
                 stopSide = -1
-
+                velocity -= RUN_SPEED_PPS
         elif event.type == SDL_KEYDOWN and event.key == SDLK_w:
             jump = True
         elif event.type == SDL_KEYUP and event.key == SDLK_w:
@@ -59,6 +73,7 @@ i = 0
 groundHeight = 100
 moreHigher = 0
 leftEnd = False
+leftLife = 5
 
 
 class Mario:
@@ -69,7 +84,7 @@ class Mario:
         self.imageR = load_image('images/marioAniRight1.png')
         self.imageStandR.draw(300, groundHeight + jumpHeight)
         self.frame = 0
-        self.die = False
+
 
     def update(self):
         global jump
@@ -79,6 +94,7 @@ class Mario:
         global keepJump
         global realXLocation
         realXLocation = x * -1
+
         if jump:
             t = i / 50
             jumpHeight = (2 * t ** 2 - 3 * t + 1) * 0 + (-4 * t ** 2 + 4 * t) * (highestJumpHeight + moreHigher) + (
@@ -99,33 +115,31 @@ class Mario:
         if jump is False:
             keepJump = True
 
-        # if jumpHeight > highestJumpHeight:
-        #     jump = False
-        # if jump is False and jumpHeight > 0:
-        #     jumpHeight -= 5
-
     def draw(self):
         global frame
         global characterAniSpeed
         global x
         global leftEndMove
         global leftEnd
+        global velocity
+
         if charDir == 1:
-            self.imageR.clip_draw(frame * 60, 0, 56, 70, 300 + leftEndMove,
-                                  100 + jumpHeight)  # 숫자 5번째에 300으로 한 이유는 마리오의 위치 고정
+            self.imageR.clip_draw(int(frame) * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight)  # 숫자 5번째에 300으로 한 이유는 마리오의 위치 고정
+
         elif charDir == -1:
-            self.imageL.clip_draw(frame * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight)
+            self.imageL.clip_draw(int(frame) * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight)
 
         elif stopSide == 1 and charDir == 0:
             self.imageStandR.draw(300 + leftEndMove, 100 + jumpHeight)
+
         elif stopSide == -1 and charDir == 0:
             self.imageStandL.draw(300 + leftEndMove, 100 + jumpHeight)
 
-        if characterAniSpeed % 2 == 0:  # 캐릭터 애니사진 넘어가는 속도 조절 장치
-            frame = (frame + 1) % 21  # 마리오 사진 넘기기
-        characterAniSpeed += 1
-        x += charDir * -3  # 속도 올리기
+        frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 21 # 마리오 사진 넘기기
 
+        x += velocity * game_framework.frame_time
+
+        print(x, "//", RUN_SPEED_PPS, "//",velocity, "//",game_framework.frame_time)
         if x < 0:  # 왼쪽 끝으로 가면 배경이 멈추고 캐릭터가 직접 움직인다
             leftEnd = False
         if x >= 0:
