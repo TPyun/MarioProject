@@ -18,9 +18,6 @@ from background import Bgm
 
 import game_world
 
-
-
-
 name = "MainState"
 
 mario = None
@@ -31,16 +28,13 @@ timeUi = None
 bgm = None
 font = None
 sg = None
-# nbr = None
-somemonsters = None
-allbricks = None
 life = None
 
 
 def enter():
     global mario
     mario = character.Mario()
-    game_world.add_object(mario, 1)
+    game_world.add_object(mario, 2)
 
     global ground
     ground = Ground()
@@ -59,27 +53,52 @@ def enter():
     monster6 = Monster()
     monster7 = Monster()
     monster8 = Monster()
-    game_world.add_object(monster1, 1)
-    game_world.add_object(monster2, 1)
-    game_world.add_object(monster3, 1)
-    game_world.add_object(monster4, 1)
-    game_world.add_object(monster5, 1)
-    game_world.add_object(monster6, 1)
-    game_world.add_object(monster7, 1)
-    game_world.add_object(monster8, 1)
-
+    if title_state.difficulty >= 1:
+        game_world.add_object(monster1, 1)
+        game_world.add_object(monster2, 1)
+        print('1')
+    if title_state.difficulty >= 2:
+        game_world.add_object(monster3, 1)
+        game_world.add_object(monster4, 1)
+        print('2')
+    if title_state.difficulty >= 3:
+        game_world.add_object(monster5, 1)
+        game_world.add_object(monster6, 1)
+        print('3')
+    if title_state.difficulty >= 4:
+        game_world.add_object(monster7, 1)
+        game_world.add_object(monster8, 1)
+        print('4')
 
     global timeUi
     timeUi = TimeUi()
-    game_world.add_object(timeUi, 1)
+    game_world.add_object(timeUi, 2)
 
-    global allbricks
-    allbricks = [terrain.Brick() for i in range(10)]
-    # game_world.add_object(allbricks, 1)
+    global brick0, brick1, brick2, brick3, brick4, brick5, brick6, brick7, brick8, brick9
+    brick0 = Brick()
+    brick1 = Brick()
+    brick2 = Brick()
+    brick3 = Brick()
+    brick4 = Brick()
+    brick5 = Brick()
+    brick6 = Brick()
+    brick7 = Brick()
+    brick8 = Brick()
+    brick9 = Brick()
+    game_world.add_object(brick0, 1)
+    game_world.add_object(brick1, 1)
+    game_world.add_object(brick2, 1)
+    game_world.add_object(brick3, 1)
+    game_world.add_object(brick4, 1)
+    game_world.add_object(brick5, 1)
+    game_world.add_object(brick6, 1)
+    game_world.add_object(brick7, 1)
+    game_world.add_object(brick8, 1)
+    game_world.add_object(brick9, 1)
 
     global life
     life = Life()
-    game_world.add_object(life, 1)
+    game_world.add_object(life, 2)
 
     global bgm
     bgm = Bgm()
@@ -125,8 +144,8 @@ def draw():
     # for monsters.monster in somemonsters:
     #     monsters.monster.draw()
 
-    for terrain.brick in allbricks:
-        terrain.brick.draw()
+    # for terrain.brick in allbricks:
+    #     terrain.brick.draw()
     update_canvas()
 
 
