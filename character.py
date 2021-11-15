@@ -43,6 +43,7 @@ def handle_events():
         elif event.type == SDL_KEYUP and event.key == SDLK_d:
             if charDir == -1:  # a,d 동시입력하다가 손떼면 가던 방향 계속 갈수 있게끔
                 charDir = -1
+                velocity += RUN_SPEED_PPS
             else:
                 charDir = 0
                 stopSide = 1
@@ -50,6 +51,7 @@ def handle_events():
         elif event.type == SDL_KEYUP and event.key == SDLK_a:
             if charDir == 1:
                 charDir = 1
+                velocity -= RUN_SPEED_PPS
             else:
                 charDir = 0
                 stopSide = -1

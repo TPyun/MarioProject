@@ -47,6 +47,9 @@ class Brick:
         self.buildHeight = random.randrange(250, 400, 50)
         self.sticked = random.randint(0, 1)
 
+    def update(self):
+        pass
+
     def draw(self):
         if 2197 <= character.realXLocation % 3000 <= 2200:
             self.buildLocation = random.randrange(50 + 3000 * (monsters.spawnBlock - 1),

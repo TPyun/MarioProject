@@ -13,6 +13,7 @@ hell = None
 waves = None
 btnup = None
 btndown = None
+playbtn = None
 mouse = None
 x, y = 0, 0
 click = False
@@ -20,10 +21,11 @@ difficulty = 2
 wave = 1
 i = 0
 i1, i2, i3, i4, i5, i6, i7, i8, i9 = None,None,None,None,None,None,None,None,None
+btnsound = None
 
 
 def enter():
-    global ready, howlong, easy, normal, hard, hell, waves, btnup, btndown, mouse, i1, i2, i3, i4, i5, i6, i7, i8, i9
+    global ready, howlong, easy, normal, hard, hell, waves, btnup, btndown, mouse, btnsound, playbtn, i1, i2, i3, i4, i5, i6, i7, i8, i9
     i1 = load_image('images/number/clock/w1.png')
     i2 = load_image('images/number/clock/w2.png')
     i3 = load_image('images/number/clock/w3.png')
@@ -43,11 +45,13 @@ def enter():
     btnup = load_image('images/btnup.png')
     btndown = load_image('images/btndown.png')
     mouse = load_image('images/hand_arrow.png')
+    btnsound = load_wav('sound/btnsound.wav')
+    playbtn = load_image('images/playbtn.png')
 
 
 def exit():
-    global ready, howlong, easy, normal, hard, hell, waves, btnup, btndown, mouse, i1, i2, i3, i4, i5, i6, i7, i8, i9
-    del(ready, howlong, easy, normal, hard, hell, waves, btnup, btndown, mouse, i1, i2, i3, i4, i5, i6, i7, i8, i9)
+    global ready, howlong, easy, normal, hard, hell, waves, btnup, btndown, mouse, i1, i2, i3, i4, i5, i6, i7, i8, i9, btnsound, playbtn
+    del(ready, howlong, easy, normal, hard, hell, waves, btnup, btndown, mouse, i1, i2, i3, i4, i5, i6, i7, i8, i9, btnsound, playbtn)
 
 
 def handle_events():
@@ -59,8 +63,8 @@ def handle_events():
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.quit()
-            elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-                game_framework.change_state(main_state)
+            # elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
+            #     game_framework.change_state(main_state)
 
         if event.type == SDL_MOUSEMOTION:
             x = event.x
@@ -96,6 +100,7 @@ def draw():
         btndown.draw(110, 320)
         btnup.draw(540, 430)
         btndown.draw(540, 320)
+        playbtn.draw(400, 300)
 
         if wave == 1:
             i1.draw(540, 380)
@@ -122,27 +127,32 @@ def draw():
 
 
 def update():
-    global difficulty, wave, click # 0 easy, 1 normal, 2 hard, 3 hell
+    global difficulty, wave, click # 1 easy, 2 normal, 3 hard, 4 hell
 
     if click is True and 80 < x < 140 and 140 < y < 180:
+        btnsound.play()
         difficulty += 1
     if click is True and 80 < x < 140 and 250 < y < 290:
+        btnsound.play()
         difficulty -= 1
     if difficulty > 4:
         difficulty = 4
     if difficulty < 1:
         difficulty = 1
     if click is True and 500 < x < 570 and 140 < y < 180:
+        btnsound.play()
         wave += 1
     if click is True and 500 < x < 570 and 250 < y < 290:
+        btnsound.play()
         wave -= 1
     if wave > 9:
         wave = 9
     if wave < 1:
         wave = 1
-    click = False
 
-    print(difficulty, wave, "//", x, y)
+    if click is True and 150 < x < 550 and 490 < y < 550:
+        game_framework.change_state(main_state)
+    click = False
 
 
 def pause():

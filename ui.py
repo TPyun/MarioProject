@@ -7,7 +7,7 @@ import main_state
 
 setTime = 250
 readyTime = 0
-leftTime = setTime
+leftTime = str(setTime - int(get_time()) + readyTime)
 i = 1
 
 
