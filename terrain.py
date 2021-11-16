@@ -61,21 +61,59 @@ class ShortGround:
 #         self.image.draw(self.buildLocation - character.realXLocation + character.leftEndMove, self.buildHeight)
 #         self.image.draw(self.buildLocation - character.realXLocation + character.leftEndMove + 3000, self.buildHeight)
 
+
 class Brick:
     def __init__(self):
         self.image = load_image('images/wall/normalwall.png')  # 50*50
-        self.x, self.y = random.randrange(50, 2300, 50), random.randrange(250, 400, 50)
+        self.imageabnormal = load_image('images/wall/abnormalwall.png')
+        self.x, self.y = random.randrange(300, 2300, 50), random.randrange(250, 300, 50)
+        self.abnormal = random.randint(0, 9)
 
     def update(self):
         # 마리오 뒤에 몬스터 있으면 마리오 가는 방향에 다시 스폰
         if self.x + character.leftEndMove + 50 < character.realXLocation and character.velocity < 0:
+            self.abnormal = random.randint(0, 9)
             self.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 50)
-            self.y = random.randrange(250, 400, 50)
-        if character.realXLocation + 600 < self.x + character.leftEndMove - 305 and character.velocity > 0:
-            self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
-            self.y = random.randrange(250, 400, 50)
+            self.y = random.randrange(250, 500, 50)
 
-        # print(character.velocity, self.x + character.leftEndMove - 305, character.realXLocation, character.velocity)
+        if character.realXLocation + 600 < self.x + character.leftEndMove - 305 and character.velocity > 0:
+            self.abnormal = random.randint(0, 9)
+            self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
+            self.y = random.randrange(250, 500, 50)
+
+
+        # if 325 < self.x - character.realXLocation + character.leftEndMove - 25 < 335 and self.y - 50 < character.jumpHeight + character.moreHigher < self.y + 50 and character.velocity < 0:
+        #     if self.y - 25 < character.jumpHeight + 100 < self.y + 25:
+        #         character.velocity += character.RUN_SPEED_PPS
+        #         character.keepJump = False
+        #     if character.stopSide == 1:
+        #         if character.charDir == 1:  # a,d 동시입력하다가 손떼면 가던 방향 계속 갈수 있게끔
+        #             character.charDir = -1
+        #             character.velocity -= character.RUN_SPEED_PPS * 2
+        #
+        # print(character.velocity)
 
     def draw(self):
-        self.image.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
+        if self.abnormal != 1:
+            self.image.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
+        else:
+            self.imageabnormal.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
+
+
+class Coin:
+    def __init__(self):
+        self.ima = load_image('images/money.png')
+        self.x, self.y = random.randrange(300, 2300, 50), 100
+
+    def update(self):
+        if self.x + character.leftEndMove + 50 < character.realXLocation and character.velocity < 0:
+            self.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 50)
+
+        if character.realXLocation + 600 < self.x + character.leftEndMove - 305 and character.velocity > 0:
+            self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
+
+        pass
+
+    def draw(self):
+        self.ima.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
+        pass

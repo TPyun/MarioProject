@@ -117,6 +117,6 @@ class Monster:
 
     def draw(self):
         if self.dir == 1:
-            self.ima.clip_draw(int(self.frame) * 51, 0, 50, 60, self.x + character.x, self.y)
+            self.ima.clip_draw(int(self.frame) * 51, 0, 50, 60, self.x - character.realXLocation + character.leftEndMove, self.y)
         else:
             self.ima.clip_composite_draw(int(self.frame) * 51, 0, 50, 60, 0, 'h', self.x - character.realXLocation + character.leftEndMove, self.y, 50, 60)

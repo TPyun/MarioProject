@@ -16,8 +16,8 @@ FRAMES_PER_ACTION = 21
 
 running = True
 keepJump = True
-charDir = 0  # -1이면 왼쪽으로 +1이면 오른쪽 방향으로 움직인다.
 velocity = 0
+charDir = 0
 
 
 def handle_events():
@@ -35,10 +35,10 @@ def handle_events():
             game_framework.change_state(title_state)
 
         elif event.type == SDL_KEYDOWN and event.key == SDLK_d:
-            charDir = 1
+
             velocity -= RUN_SPEED_PPS
         elif event.type == SDL_KEYDOWN and event.key == SDLK_a:
-            charDir = -1
+
             velocity += RUN_SPEED_PPS
         elif event.type == SDL_KEYUP and event.key == SDLK_d:
             if charDir == -1:  # a,d 동시입력하다가 손떼면 가던 방향 계속 갈수 있게끔
@@ -95,7 +95,9 @@ class Mario:
         global moreHigher
         global keepJump
         global realXLocation
+        global charDir
         realXLocation = x * -1
+        charDir = clamp(-1, -1 * velocity, 1)  # -1이면 왼쪽으로 +1이면 오른쪽 방향으로 움직인다.
 
         if jump:
             t = i / 50
@@ -124,6 +126,7 @@ class Mario:
         global leftEndMove
         global leftEnd
         global velocity
+        global charDir
 
         if charDir == 1:
             self.imageR.clip_draw(int(frame) * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight)  # 숫자 5번째에 300으로 한 이유는 마리오의 위치 고정
@@ -153,3 +156,4 @@ class Mario:
             if leftEndMove < -280:
                 leftEndMove += 3
                 x -= 3
+

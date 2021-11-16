@@ -15,13 +15,16 @@ from terrain import Ground
 from terrain import Brick
 from background import Background
 from background import Bgm
+from terrain import Coin
 
 import game_world
 
 name = "MainState"
 
 mario = None
-monster = None
+monster1, monster2, monster3, monster4, monster5, monster6, monster7, monster8 = None, None, None, None, None, None, None, None
+brick0, brick1, brick2, brick3, brick4, brick5, brick6, brick7, brick8, brick9 = None, None, None, None, None, None, None, None, None, None
+coin0, coin1, coin2, coin3, coin4, coin5 = None, None, None, None, None, None,
 background = None
 ground = None
 timeUi = None
@@ -54,20 +57,20 @@ def enter():
     monster7 = Monster()
     monster8 = Monster()
     if title_state.difficulty >= 1:
-        game_world.add_object(monster1, 1)
-        game_world.add_object(monster2, 1)
+        game_world.add_object(monster1, 2)
+        game_world.add_object(monster2, 2)
         print('1')
     if title_state.difficulty >= 2:
-        game_world.add_object(monster3, 1)
-        game_world.add_object(monster4, 1)
+        game_world.add_object(monster3, 2)
+        game_world.add_object(monster4, 2)
         print('2')
     if title_state.difficulty >= 3:
-        game_world.add_object(monster5, 1)
-        game_world.add_object(monster6, 1)
+        game_world.add_object(monster5, 2)
+        game_world.add_object(monster6, 2)
         print('3')
     if title_state.difficulty >= 4:
-        game_world.add_object(monster7, 1)
-        game_world.add_object(monster8, 1)
+        game_world.add_object(monster7, 2)
+        game_world.add_object(monster8, 2)
         print('4')
 
     global timeUi
@@ -107,6 +110,20 @@ def enter():
     global background
     background = Background()
     game_world.add_object(background, 0)
+
+    global coin0, coin1, coin2, coin3, coin4, coin5
+    coin0 = Coin()
+    coin1 = Coin()
+    coin2 = Coin()
+    coin3 = Coin()
+    coin4 = Coin()
+    coin5 = Coin()
+    game_world.add_object(coin0, 1)
+    game_world.add_object(coin1, 1)
+    game_world.add_object(coin2, 1)
+    game_world.add_object(coin3, 1)
+    game_world.add_object(coin4, 1)
+    game_world.add_object(coin5, 1)
 
 
 def exit():
