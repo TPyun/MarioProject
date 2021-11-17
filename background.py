@@ -5,13 +5,17 @@ from pico2d import *
 class Background:
     def __init__(self):
         self.image = load_image('images/background.png')
+        self.ima = load_image('images/background1.png')
+        self.drawblock = (character.realXLocation - 800) // 2666 + 1
 
     def update(self):
+        self.drawblock = (character.realXLocation - 800) // 2666 + 1
         pass
 
     def draw(self):
         if character.leftEnd is False:
-            self.image.draw(character.x / 8 + 1333, 420)  # 백그라운드가 움직이게 하기 위해서 x좌표 입력
+            self.image.draw(character.x + 1333 + 2666 * (self.drawblock - 1), 420)
+            self.image.draw(character.x + 1333 + 2666 * (self.drawblock), 420)
         else:
             self.image.draw(1333, 420)
 
@@ -26,6 +30,8 @@ class Bgm:
     def update(self):
         if character.jump is True and character.jumpHeight == 0:
             self.jumpWav.play()
+        # print(character.jump, character.jumpHeight)
+        pass
 
     def draw(self):
         pass

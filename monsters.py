@@ -84,14 +84,20 @@ stuckwith = False
 
 
 class Monster:
+    image = None
+
     def __init__(self):
         self.velocity = 0
-        self.x, self.y = random.randrange(1000, 1900, 200), 95
+        self.x, self.y = random.randint(1000, 1900), 95
         self.frame = 0
-        self.ima = load_image('images/monsterR.png')
+        if Monster.image == None:
+            self.ima = load_image('images/monsterR.png')
         self.velocity -= RUN_SPEED_PPS
         self.dir = 0
         self.i = 0
+
+    def get_bb(self):
+        return self.x - character.realXLocation + character.leftEndMove - 20, self.y - 20, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 20
 
     def update(self):
         self.i += 1
@@ -108,10 +114,10 @@ class Monster:
 
         # 마리오 뒤에 몬스터 있으면 마리오 가는 방향에 다시 스폰
         if self.x + character.leftEndMove + 50 < character.realXLocation and character.velocity < 0:
-            self.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 200)
+            self.x = random.randint(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800)
 
         if character.realXLocation + 600 < self.x + character.leftEndMove - 305 and character.velocity > 0:
-            self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 200)
+            self.x = random.randint(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400)
 
         # print(character.velocity, self.x + character.leftEndMove - 305, character.realXLocation, character.velocity)
 
@@ -120,3 +126,4 @@ class Monster:
             self.ima.clip_draw(int(self.frame) * 51, 0, 50, 60, self.x - character.realXLocation + character.leftEndMove, self.y)
         else:
             self.ima.clip_composite_draw(int(self.frame) * 51, 0, 50, 60, 0, 'h', self.x - character.realXLocation + character.leftEndMove, self.y, 50, 60)
+        draw_rectangle(*self.get_bb())

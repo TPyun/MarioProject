@@ -66,21 +66,20 @@ class Brick:
     def __init__(self):
         self.image = load_image('images/wall/normalwall.png')  # 50*50
         self.imageabnormal = load_image('images/wall/abnormalwall.png')
-        self.x, self.y = random.randrange(300, 2300, 50), random.randrange(250, 300, 50)
+        self.x, self.y = random.randrange(300, 2300, 100), random.randrange(250, 400, 100)
         self.abnormal = random.randint(0, 9)
 
     def update(self):
         # 마리오 뒤에 몬스터 있으면 마리오 가는 방향에 다시 스폰
         if self.x + character.leftEndMove + 50 < character.realXLocation and character.velocity < 0:
             self.abnormal = random.randint(0, 9)
-            self.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 50)
-            self.y = random.randrange(250, 500, 50)
+            self.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 100)
+            self.y = random.randrange(250, 400, 100)
 
         if character.realXLocation + 600 < self.x + character.leftEndMove - 305 and character.velocity > 0:
             self.abnormal = random.randint(0, 9)
-            self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
-            self.y = random.randrange(250, 500, 50)
-
+            self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 100)
+            self.y = random.randrange(250, 400, 100)
 
         # if 325 < self.x - character.realXLocation + character.leftEndMove - 25 < 335 and self.y - 50 < character.jumpHeight + character.moreHigher < self.y + 50 and character.velocity < 0:
         #     if self.y - 25 < character.jumpHeight + 100 < self.y + 25:
@@ -103,7 +102,7 @@ class Brick:
 class Coin:
     def __init__(self):
         self.ima = load_image('images/money.png')
-        self.x, self.y = random.randrange(300, 2300, 50), 100
+        self.x, self.y = random.randrange(500, 2300, 50), 100
 
     def update(self):
         if self.x + character.leftEndMove + 50 < character.realXLocation and character.velocity < 0:
@@ -112,8 +111,19 @@ class Coin:
         if character.realXLocation + 600 < self.x + character.leftEndMove - 305 and character.velocity > 0:
             self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
 
+    def draw(self):
+        self.ima.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
+        pass
+
+
+class Goal:
+    def __init__(self):
+        self.ima = load_image('images/final.png')
+        self.ima1 = load_image('images/tower.png')
+        pass
+
+    def update(self):
         pass
 
     def draw(self):
-        self.ima.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
         pass

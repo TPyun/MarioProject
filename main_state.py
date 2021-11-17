@@ -16,6 +16,7 @@ from terrain import Brick
 from background import Background
 from background import Bgm
 from terrain import Coin
+from terrain import Goal
 
 import game_world
 
@@ -32,6 +33,50 @@ bgm = None
 font = None
 sg = None
 life = None
+goal = None
+
+allmonsters = []
+
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
+
+def sidecollide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
+
+def fromupcollide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a < right_b:
+        if right_a > left_b:
+            if bottom_a - 10 < top_b < bottom_a + 10:
+                if character.i < 10: return False
+                else: return True
+
+            return False
+
+
+def fromdowncollide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if bottom_a > top_b: return False
 
 
 def enter():
@@ -47,31 +92,36 @@ def enter():
     # somemonsters = [monsters.Monster() for i in range(title_state.difficulty * 3)]
     # # game_world.add_object(somemonsters, 1)
 
-    global monster1, monster2, monster3, monster4, monster5, monster6, monster7, monster8
-    monster1 = Monster()
-    monster2 = Monster()
-    monster3 = Monster()
-    monster4 = Monster()
-    monster5 = Monster()
-    monster6 = Monster()
-    monster7 = Monster()
-    monster8 = Monster()
-    if title_state.difficulty >= 1:
-        game_world.add_object(monster1, 2)
-        game_world.add_object(monster2, 2)
-        print('1')
-    if title_state.difficulty >= 2:
-        game_world.add_object(monster3, 2)
-        game_world.add_object(monster4, 2)
-        print('2')
-    if title_state.difficulty >= 3:
-        game_world.add_object(monster5, 2)
-        game_world.add_object(monster6, 2)
-        print('3')
-    if title_state.difficulty >= 4:
-        game_world.add_object(monster7, 2)
-        game_world.add_object(monster8, 2)
-        print('4')
+
+    global allmonsters
+    allmonsters = [Monster() for i in range(title_state.difficulty * 2)]
+    game_world.add_objects(allmonsters, 2)
+
+    # global monster1, monster2, monster3, monster4, monster5, monster6, monster7, monster8
+    # monster1 = Monster()
+    # monster2 = Monster()
+    # monster3 = Monster()
+    # monster4 = Monster()
+    # monster5 = Monster()
+    # monster6 = Monster()
+    # monster7 = Monster()
+    # monster8 = Monster()
+    # if title_state.difficulty >= 1:
+    #     game_world.add_object(monster1, 2)
+    #     game_world.add_object(monster2, 2)
+    #     print('1')
+    # if title_state.difficulty >= 2:
+    #     game_world.add_object(monster3, 2)
+    #     game_world.add_object(monster4, 2)
+    #     print('2')
+    # if title_state.difficulty >= 3:
+    #     game_world.add_object(monster5, 2)
+    #     game_world.add_object(monster6, 2)
+    #     print('3')
+    # if title_state.difficulty >= 4:
+    #     game_world.add_object(monster7, 2)
+    #     game_world.add_object(monster8, 2)
+    #     print('4')
 
     global timeUi
     timeUi = TimeUi()
@@ -105,7 +155,7 @@ def enter():
 
     global bgm
     bgm = Bgm()
-    # game_world.add_object(bgm, 0)
+    game_world.add_object(bgm, 0)
 
     global background
     background = Background()
@@ -125,6 +175,10 @@ def enter():
     game_world.add_object(coin4, 1)
     game_world.add_object(coin5, 1)
 
+    global goal
+    goal = Goal()
+    game_world.add_object(goal, 1)
+
 
 def exit():
     game_world.clear()
@@ -142,27 +196,42 @@ def handle_events():
     character.handle_events()
 
 
+damaged = False
+i = 0
+r = 0
+
 def update():
+    global damaged, i, r
     for game_object in game_world.all_objects():
         game_object.update()
 
-    # for monsters.monster in somemonsters:
-    #     monsters.monster.update()
+    for monsters in allmonsters:
+        if fromupcollide(mario, monsters):
+            allmonsters.remove(monsters)
+            game_world.remove_object(monsters)
+            print('1')
 
-    # fill here for collision check
+        if collide(mario, monsters):
+            damaged = True
+        else: damaged = False
 
+        if damaged == True:
+            i += 1
+            if i <= 1:
+                character.leftLife -= 1
+        if i > 2:
+            r += 1
+        if r > 300:
+            damaged = False
+            i = 0
+            r = 0
+        print(damaged, i, r)
 
 
 def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
-
-    # for monsters.monster in somemonsters:
-    #     monsters.monster.draw()
-
-    # for terrain.brick in allbricks:
-    #     terrain.brick.draw()
     update_canvas()
 
 

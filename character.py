@@ -2,10 +2,11 @@ from pico2d import *
 
 import game_framework
 import title_state
+import main_state
 import monsters
 
 PIXEL_PER_METER = (10.0 / 0.15)
-RUN_SPEED_KMPH = 15.0
+RUN_SPEED_KMPH = 20.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -70,14 +71,13 @@ frame = 0  # 캐릭터 애니사진 파일 움직이기 위한 용도
 stopSide = 1
 jump = False
 jumpHeight = 0
-highestJumpHeight = 100
+highestJumpHeight = 80
 leftEndMove = 0
 i = 0
 groundHeight = 100
 moreHigher = 0
 leftEnd = False
 leftLife = 5
-
 
 class Mario:
     def __init__(self):
@@ -88,6 +88,8 @@ class Mario:
         self.imageStandR.draw(300, groundHeight + jumpHeight)
         self.frame = 0
 
+        self.i = 0
+
     def update(self):
         global jump
         global jumpHeight
@@ -96,6 +98,8 @@ class Mario:
         global keepJump
         global realXLocation
         global charDir
+        global leftLife
+
         realXLocation = x * -1
         charDir = clamp(-1, -1 * velocity, 1)  # -1이면 왼쪽으로 +1이면 오른쪽 방향으로 움직인다.
 
@@ -106,7 +110,7 @@ class Mario:
             i += 0.8
             i -= 0.001 * moreHigher
             if keepJump is True:
-                moreHigher += 5
+                moreHigher += 4
                 # i -= 0.3 + 0.001 * moreHigher # 더 점프할 시 하강속도 문제로 i 강제로 줄임
             else:
                 pass
@@ -118,6 +122,11 @@ class Mario:
             moreHigher = 0
         if jump is False:
             keepJump = True
+
+
+        if leftLife == 4 or 3 or 2 or 1:
+            pass
+
 
     def draw(self):
         global frame
@@ -140,8 +149,9 @@ class Mario:
         elif stopSide == -1 and charDir == 0:
             self.imageStandL.draw(300 + leftEndMove, 100 + jumpHeight)
 
+
         # if monsters.Monster().stuckwith is False:
-        frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 21 # 마리오 사진 넘기기
+        frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION # 마리오 사진 넘기기
 
         # if monsters.Monster().stuckwith:
         #     frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 40
@@ -156,4 +166,9 @@ class Mario:
             if leftEndMove < -280:
                 leftEndMove += 3
                 x -= 3
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return 300 - 15 + leftEndMove, 100 + jumpHeight - 40, 300 + 15 + leftEndMove, 100 + jumpHeight + 40
+
 
