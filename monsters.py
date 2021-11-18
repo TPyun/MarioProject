@@ -96,8 +96,6 @@ class Monster:
         self.dir = 0
         self.i = 0
 
-    def get_bb(self):
-        return self.x - character.realXLocation + character.leftEndMove - 20, self.y - 20, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 20
 
     def update(self):
         self.i += 1
@@ -126,4 +124,11 @@ class Monster:
             self.ima.clip_draw(int(self.frame) * 51, 0, 50, 60, self.x - character.realXLocation + character.leftEndMove, self.y)
         else:
             self.ima.clip_composite_draw(int(self.frame) * 51, 0, 50, 60, 0, 'h', self.x - character.realXLocation + character.leftEndMove, self.y, 50, 60)
-        draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_monster_head())
+        draw_rectangle(*self.get_monster_body_pos())
+
+    def get_monster_body_pos(self):
+        return self.x - character.realXLocation + character.leftEndMove - 20, self.y - 20, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 15
+
+    def get_monster_head(self):
+        return self.x - character.realXLocation + character.leftEndMove - 15, self.y + 15, self.x - character.realXLocation + character.leftEndMove + 15, self.y + 20

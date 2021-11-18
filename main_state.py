@@ -1,5 +1,5 @@
 from pico2d import *
-
+import random
 
 import monsters
 import title_state
@@ -36,47 +36,58 @@ life = None
 goal = None
 
 allmonsters = []
+allbricks = []
+allcoins = []
 
 
-def collide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_bb()
+def mario_feet_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_mariofeetpos()
     left_b, bottom_b, right_b, top_b = b.get_bb()
     if left_a > right_b: return False
     if right_a < left_b: return False
     if top_a < bottom_b: return False
     if bottom_a > top_b: return False
-
     return True
 
 
-def sidecollide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_bb()
+def mario_side_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_sidepos()
     left_b, bottom_b, right_b, top_b = b.get_bb()
     if left_a > right_b: return False
     if right_a < left_b: return False
     if top_a < bottom_b: return False
     if bottom_a > top_b: return False
-
     return True
 
 
-def fromupcollide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_bb()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
-    if left_a < right_b:
-        if right_a > left_b:
-            if bottom_a - 10 < top_b < bottom_a + 10:
-                if character.i < 10: return False
-                else: return True
-
-            return False
-
-
-def fromdowncollide(a, b):
-    left_a, bottom_a, right_a, top_a = a.get_bb()
-    left_b, bottom_b, right_b, top_b = b.get_bb()
-
+def mario_monster_side_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_sidepos()
+    left_b, bottom_b, right_b, top_b = b.get_monster_body_pos()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
     if bottom_a > top_b: return False
+    return True
+
+
+def mario_head_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_marioheadpos()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
+
+
+def mario_feet_monster_head_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_mariofeetpos()
+    left_b, bottom_b, right_b, top_b = b.get_monster_head()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
 
 
 def enter():
@@ -127,27 +138,31 @@ def enter():
     timeUi = TimeUi()
     game_world.add_object(timeUi, 2)
 
-    global brick0, brick1, brick2, brick3, brick4, brick5, brick6, brick7, brick8, brick9
-    brick0 = Brick()
-    brick1 = Brick()
-    brick2 = Brick()
-    brick3 = Brick()
-    brick4 = Brick()
-    brick5 = Brick()
-    brick6 = Brick()
-    brick7 = Brick()
-    brick8 = Brick()
-    brick9 = Brick()
-    game_world.add_object(brick0, 1)
-    game_world.add_object(brick1, 1)
-    game_world.add_object(brick2, 1)
-    game_world.add_object(brick3, 1)
-    game_world.add_object(brick4, 1)
-    game_world.add_object(brick5, 1)
-    game_world.add_object(brick6, 1)
-    game_world.add_object(brick7, 1)
-    game_world.add_object(brick8, 1)
-    game_world.add_object(brick9, 1)
+    global allbricks
+    allbricks = [Brick() for i in range(5)]
+    game_world.add_objects(allbricks, 1)
+
+    # global brick0, brick1, brick2, brick3, brick4, brick5, brick6, brick7, brick8, brick9
+    # brick0 = Brick()
+    # brick1 = Brick()
+    # brick2 = Brick()
+    # brick3 = Brick()
+    # brick4 = Brick()
+    # brick5 = Brick()
+    # brick6 = Brick()
+    # brick7 = Brick()
+    # brick8 = Brick()
+    # brick9 = Brick()
+    # game_world.add_object(brick0, 1)
+    # game_world.add_object(brick1, 1)
+    # game_world.add_object(brick2, 1)
+    # game_world.add_object(brick3, 1)
+    # game_world.add_object(brick4, 1)
+    # game_world.add_object(brick5, 1)
+    # game_world.add_object(brick6, 1)
+    # game_world.add_object(brick7, 1)
+    # game_world.add_object(brick8, 1)
+    # game_world.add_object(brick9, 1)
 
     global life
     life = Life()
@@ -161,19 +176,23 @@ def enter():
     background = Background()
     game_world.add_object(background, 0)
 
-    global coin0, coin1, coin2, coin3, coin4, coin5
-    coin0 = Coin()
-    coin1 = Coin()
-    coin2 = Coin()
-    coin3 = Coin()
-    coin4 = Coin()
-    coin5 = Coin()
-    game_world.add_object(coin0, 1)
-    game_world.add_object(coin1, 1)
-    game_world.add_object(coin2, 1)
-    game_world.add_object(coin3, 1)
-    game_world.add_object(coin4, 1)
-    game_world.add_object(coin5, 1)
+    global allcoins
+    allcoins = [Coin() for i in range(3)]
+    game_world.add_objects(allcoins, 1)
+
+    # global coin0, coin1, coin2, coin3, coin4, coin5
+    # coin0 = Coin()
+    # coin1 = Coin()
+    # coin2 = Coin()
+    # coin3 = Coin()
+    # coin4 = Coin()
+    # coin5 = Coin()
+    # game_world.add_object(coin0, 1)
+    # game_world.add_object(coin1, 1)
+    # game_world.add_object(coin2, 1)
+    # game_world.add_object(coin3, 1)
+    # game_world.add_object(coin4, 1)
+    # game_world.add_object(coin5, 1)
 
     global goal
     goal = Goal()
@@ -196,36 +215,63 @@ def handle_events():
     character.handle_events()
 
 
-damaged = False
+damaged = None
 i = 0
 r = 0
+
 
 def update():
     global damaged, i, r
     for game_object in game_world.all_objects():
         game_object.update()
 
+
     for monsters in allmonsters:
-        if fromupcollide(mario, monsters):
-            allmonsters.remove(monsters)
-            game_world.remove_object(monsters)
-            print('1')
+        if mario_feet_monster_head_collide(mario, monsters) and i == 0:
+            if character.velocity < 0 or character.stopSide < 0:
+                monsters.x = random.randint(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800)
+            elif character.velocity > 0 or character.stopSide > 0:
+                monsters.x = random.randint(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400)
 
-        if collide(mario, monsters):
+        if mario_monster_side_collide(mario, monsters):
             damaged = True
-        else: damaged = False
-
-        if damaged == True:
+            character.damaged = True
+        if damaged:
             i += 1
             if i <= 1:
                 character.leftLife -= 1
         if i > 2:
             r += 1
-        if r > 300:
+        if r > 500:
             damaged = False
+            character.damaged = False
             i = 0
             r = 0
-        print(damaged, i, r)
+
+
+    for bricks in allbricks:
+        if mario_head_collide(mario, bricks):
+            character.keepJump = False
+            character.JumpHeight = terrain.Brick().y - 30
+            character.i = 26
+
+            if character.velocity < 0 or character.stopSide < 0:
+                bricks.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 100)
+                bricks.y = random.randrange(250, 400, 100)
+
+            elif character.velocity > 0 or character.stopSide > 0:
+                bricks.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 100)
+                bricks.y = random.randrange(250, 400, 100)
+
+
+    for coins in allcoins:
+        if mario_side_collide(mario, coins):
+            print('1')
+            if character.velocity < 0 or character.stopSide < 0:
+                coins.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 50)
+
+            if character.velocity > 0 or character.stopSide > 0:
+                coins.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
 
 
 def draw():

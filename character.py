@@ -22,12 +22,7 @@ charDir = 0
 
 
 def handle_events():
-    global stopSide
-    global running
-    global charDir
-    global jump
-    global keepJump
-    global velocity
+    global stopSide, running, charDir, jump, keepJump, velocity
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -78,6 +73,9 @@ groundHeight = 100
 moreHigher = 0
 leftEnd = False
 leftLife = 5
+damaged = None
+r = 0
+
 
 class Mario:
     def __init__(self):
@@ -87,18 +85,10 @@ class Mario:
         self.imageR = load_image('images/marioAniRight1.png')
         self.imageStandR.draw(300, groundHeight + jumpHeight)
         self.frame = 0
-
         self.i = 0
 
     def update(self):
-        global jump
-        global jumpHeight
-        global i
-        global moreHigher
-        global keepJump
-        global realXLocation
-        global charDir
-        global leftLife
+        global jump, jumpHeight, i, moreHigher, keepJump, realXLocation, charDir, leftLife, damaged, r
 
         realXLocation = x * -1
         charDir = clamp(-1, -1 * velocity, 1)  # -1이면 왼쪽으로 +1이면 오른쪽 방향으로 움직인다.
@@ -123,34 +113,41 @@ class Mario:
         if jump is False:
             keepJump = True
 
+        if damaged is True:
+            r += 1
+        else:
+            self.imageL.opacify(1)
+            self.imageR.opacify(1)
+            self.imageStandR.opacify(1)
+            self.imageStandL.opacify(1)
+            r = 0
 
-        if leftLife == 4 or 3 or 2 or 1:
-            pass
-
+        if damaged is True and r % 20 < 10:
+            self.imageL.opacify(0)
+            self.imageR.opacify(0)
+            self.imageStandR.opacify(0)
+            self.imageStandL.opacify(0)
+        elif damaged is True and r % 20 > 10:
+            self.imageL.opacify(1)
+            self.imageR.opacify(1)
+            self.imageStandR.opacify(1)
+            self.imageStandL.opacify(1)
 
     def draw(self):
-        global frame
-        global characterAniSpeed
-        global x
-        global leftEndMove
-        global leftEnd
-        global velocity
-        global charDir
+        global frame, characterAniSpeed, x, leftEndMove, leftEnd, velocity, charDir
 
         if charDir == 1:
-            self.imageR.clip_draw(int(frame) * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight)  # 숫자 5번째에 300으로 한 이유는 마리오의 위치 고정
+            self.imageR.clip_draw(int(frame) * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight, 56, 70)  # 숫자 5번째에 300으로 한 이유는 마리오의 위치 고정
 
         elif charDir == -1:
-            self.imageL.clip_draw(int(frame) * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight)
+            self.imageL.clip_draw(int(frame) * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight, 56, 70)
 
         elif stopSide == 1 and charDir == 0:
-            self.imageStandR.draw(300 + leftEndMove, 100 + jumpHeight)
+            self.imageStandR.draw(300 + leftEndMove, 100 + jumpHeight, 56, 70)
 
         elif stopSide == -1 and charDir == 0:
-            self.imageStandL.draw(300 + leftEndMove, 100 + jumpHeight)
+            self.imageStandL.draw(300 + leftEndMove, 100 + jumpHeight, 56, 70)
 
-
-        # if monsters.Monster().stuckwith is False:
         frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION # 마리오 사진 넘기기
 
         # if monsters.Monster().stuckwith:
@@ -166,9 +163,16 @@ class Mario:
             if leftEndMove < -280:
                 leftEndMove += 3
                 x -= 3
-        draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_sidepos())
+        draw_rectangle(*self.get_marioheadpos())
+        draw_rectangle(*self.get_mariofeetpos())
 
-    def get_bb(self):
-        return 300 - 15 + leftEndMove, 100 + jumpHeight - 40, 300 + 15 + leftEndMove, 100 + jumpHeight + 40
+    def get_sidepos(self):
+        return 300 - 15 + leftEndMove, 100 + jumpHeight - 25, 300 + 15 + leftEndMove, 100 + jumpHeight + 25
 
+    def get_marioheadpos(self):
+        return 300 - 10 + leftEndMove, 100 + jumpHeight + 25, 300 + 10 + leftEndMove, 100 + jumpHeight + 30
+
+    def get_mariofeetpos(self):
+        return 300 - 10 + leftEndMove, 100 + jumpHeight - 35, 300 + 10 + leftEndMove, 100 + jumpHeight - 25
 

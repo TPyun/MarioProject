@@ -66,20 +66,20 @@ class Brick:
     def __init__(self):
         self.image = load_image('images/wall/normalwall.png')  # 50*50
         self.imageabnormal = load_image('images/wall/abnormalwall.png')
-        self.x, self.y = random.randrange(300, 2300, 100), random.randrange(250, 400, 100)
+        self.x, self.y = random.randrange(300, 2300, 50), random.randrange(250, 400, 50)
         self.abnormal = random.randint(0, 9)
 
     def update(self):
         # 마리오 뒤에 몬스터 있으면 마리오 가는 방향에 다시 스폰
         if self.x + character.leftEndMove + 50 < character.realXLocation and character.velocity < 0:
             self.abnormal = random.randint(0, 9)
-            self.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 100)
-            self.y = random.randrange(250, 400, 100)
+            self.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 50)
+            self.y = random.randrange(250, 400, 50)
 
         if character.realXLocation + 600 < self.x + character.leftEndMove - 305 and character.velocity > 0:
             self.abnormal = random.randint(0, 9)
-            self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 100)
-            self.y = random.randrange(250, 400, 100)
+            self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
+            self.y = random.randrange(250, 400, 50)
 
         # if 325 < self.x - character.realXLocation + character.leftEndMove - 25 < 335 and self.y - 50 < character.jumpHeight + character.moreHigher < self.y + 50 and character.velocity < 0:
         #     if self.y - 25 < character.jumpHeight + 100 < self.y + 25:
@@ -97,6 +97,10 @@ class Brick:
             self.image.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
         else:
             self.imageabnormal.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return self.x - character.realXLocation + character.leftEndMove - 25, self.y - 25, self.x - character.realXLocation + character.leftEndMove + 25, self.y + 25
 
 
 class Coin:
@@ -113,7 +117,11 @@ class Coin:
 
     def draw(self):
         self.ima.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
+        draw_rectangle(*self.get_bb())
         pass
+
+    def get_bb(self):
+        return self.x - character.realXLocation - 20 + character.leftEndMove, self.y - 20, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 20
 
 
 class Goal:
