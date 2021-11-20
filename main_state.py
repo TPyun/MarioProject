@@ -5,7 +5,7 @@ import monsters
 import title_state
 import game_framework
 import terrain
-
+import ui
 
 from monsters import Monster
 import character
@@ -50,6 +50,14 @@ def mario_feet_collide(a, b):
     return True
 
 
+def mario_feet_onlyleftright_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_mariofeetpos()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a + 3 > right_b: return True
+    if right_a < left_b + 3: return True
+    return False
+
+
 def mario_side_collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_sidepos()
     left_b, bottom_b, right_b, top_b = b.get_bb()
@@ -88,6 +96,26 @@ def mario_feet_monster_head_collide(a, b):
     if top_a < bottom_b: return False
     if bottom_a > top_b: return False
     return True
+
+def mario_feet_brickout1_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_mariofeetpos()
+    left_b, bottom_b, right_b, top_b = b.get_bb_out1()
+    if left_a < left_b: return False
+    if right_a > right_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
+
+
+def mario_feet_brickout2_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_mariofeetpos()
+    left_b, bottom_b, right_b, top_b = b.get_bb_out2()
+    if left_a < left_b: return False
+    if right_a > right_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
+
 
 
 def enter():
@@ -218,10 +246,12 @@ def handle_events():
 damaged = None
 i = 0
 r = 0
-
+t = 0
+z = 0
+onbrick = False
 
 def update():
-    global damaged, i, r
+    global damaged, i, r, onbrick, t, z
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -248,9 +278,27 @@ def update():
             i = 0
             r = 0
 
-
     for bricks in allbricks:
-        if mario_head_collide(mario, bricks):
+        if mario_feet_collide(mario, bricks) and character.i > 1:
+            character.onbrick = bricks.y - 40
+            onbrick = True
+            character.jump = False
+            character.jumpHeight = 0
+            character.fall = False
+            character.i = 0
+            character.moreHigher = 0
+            character.keepJump = True
+
+        if mario_feet_brickout1_collide(mario, bricks) and character.onbrick > 0 and character.i < 1:
+            character.fall = True
+            onbrick = False
+
+        if mario_feet_brickout2_collide(mario, bricks) and character.onbrick > 0 and character.i < 1:
+            character.fall = True
+            onbrick = False
+
+
+        if mario_head_collide(mario, bricks) and character.i <= 25:
             character.keepJump = False
             character.JumpHeight = terrain.Brick().y - 30
             character.i = 26
@@ -263,10 +311,18 @@ def update():
                 bricks.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 100)
                 bricks.y = random.randrange(250, 400, 100)
 
+        if mario_side_collide(mario, bricks) and character.i > 0:
+            if character.charDir > 0 or character.charDir < 0:
+                if character.charDir < 0:
+                    character.velocity = 0
+                if character.charDir > 0:
+                    character.velocity = 0
+                character.cankeyup = False
+
 
     for coins in allcoins:
         if mario_side_collide(mario, coins):
-            print('1')
+            ui.points += 5
             if character.velocity < 0 or character.stopSide < 0:
                 coins.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 50)
 

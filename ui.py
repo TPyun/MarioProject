@@ -12,18 +12,21 @@ i = 1
 
 
 class TimeUi:
+    image = None
+
     def __init__(self):
-        self.imageClock = load_image('images/number/clock/clock.png')
-        self.image0 = load_image('images/number/clock/w0.png')
-        self.image1 = load_image('images/number/clock/w1.png')
-        self.image2 = load_image('images/number/clock/w2.png')
-        self.image3 = load_image('images/number/clock/w3.png')
-        self.image4 = load_image('images/number/clock/w4.png')
-        self.image5 = load_image('images/number/clock/w5.png')
-        self.image6 = load_image('images/number/clock/w6.png')
-        self.image7 = load_image('images/number/clock/w7.png')
-        self.image8 = load_image('images/number/clock/w8.png')
-        self.image9 = load_image('images/number/clock/w9.png')
+        if TimeUi.image == None:
+            self.imageClock = load_image('images/number/clock/clock.png')
+            self.image0 = load_image('images/number/clock/w0.png')
+            self.image1 = load_image('images/number/clock/w1.png')
+            self.image2 = load_image('images/number/clock/w2.png')
+            self.image3 = load_image('images/number/clock/w3.png')
+            self.image4 = load_image('images/number/clock/w4.png')
+            self.image5 = load_image('images/number/clock/w5.png')
+            self.image6 = load_image('images/number/clock/w6.png')
+            self.image7 = load_image('images/number/clock/w7.png')
+            self.image8 = load_image('images/number/clock/w8.png')
+            self.image9 = load_image('images/number/clock/w9.png')
 
     def update(self):
         global setTime
@@ -126,3 +129,32 @@ class Life:
             self.ima4.draw(80, 560)
         if character.leftLife == 5:
             self.ima5.draw(80, 560)
+
+points = 0
+
+class Point:
+        image = None
+
+        def __init__(self):
+            if Point.image == None:
+                self.imageClock = load_image('images/number/clock/clock.png')
+                self.image0 = load_image('images/number/clock/w0.png')
+                self.image1 = load_image('images/number/clock/w1.png')
+                self.image2 = load_image('images/number/clock/w2.png')
+                self.image3 = load_image('images/number/clock/w3.png')
+                self.image4 = load_image('images/number/clock/w4.png')
+                self.image5 = load_image('images/number/clock/w5.png')
+                self.image6 = load_image('images/number/clock/w6.png')
+                self.image7 = load_image('images/number/clock/w7.png')
+                self.image8 = load_image('images/number/clock/w8.png')
+                self.image9 = load_image('images/number/clock/w9.png')
+
+        def update(self):
+            global points
+
+            pass
+
+        def draw(self):
+            global points
+
+            pass
