@@ -11,6 +11,7 @@ from monsters import Monster
 import character
 from ui import TimeUi
 from ui import Life
+from ui import Point
 from terrain import Ground
 from terrain import Brick
 from background import Background
@@ -97,6 +98,7 @@ def mario_feet_monster_head_collide(a, b):
     if bottom_a > top_b: return False
     return True
 
+
 def mario_feet_brickout1_collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_mariofeetpos()
     left_b, bottom_b, right_b, top_b = b.get_bb_out1()
@@ -165,6 +167,11 @@ def enter():
     global timeUi
     timeUi = TimeUi()
     game_world.add_object(timeUi, 2)
+
+    global point
+    point = Point()
+    game_world.add_object(point, 2)
+
 
     global allbricks
     allbricks = [Brick() for i in range(5)]
@@ -250,14 +257,15 @@ t = 0
 z = 0
 onbrick = False
 
+
 def update():
     global damaged, i, r, onbrick, t, z
     for game_object in game_world.all_objects():
         game_object.update()
 
-
     for monsters in allmonsters:
         if mario_feet_monster_head_collide(mario, monsters) and i == 0:
+            ui.points += 10
             if character.velocity < 0 or character.stopSide < 0:
                 monsters.x = random.randint(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800)
             elif character.velocity > 0 or character.stopSide > 0:
@@ -297,11 +305,10 @@ def update():
             character.fall = True
             onbrick = False
 
-
         if mario_head_collide(mario, bricks) and character.i <= 25:
             character.keepJump = False
             character.JumpHeight = terrain.Brick().y - 30
-            character.i = 26
+            character.i = 37
 
             if character.velocity < 0 or character.stopSide < 0:
                 bricks.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 100)
@@ -318,7 +325,6 @@ def update():
                 if character.charDir > 0:
                     character.velocity = 0
                 character.cankeyup = False
-
 
     for coins in allcoins:
         if mario_side_collide(mario, coins):

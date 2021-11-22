@@ -79,6 +79,7 @@ r = 0
 onbrick = 0
 fall = False
 
+
 class Mario:
     def __init__(self):
         self.imageStandL = load_image('images/standL.png')
@@ -110,7 +111,6 @@ class Mario:
                 pass
 
         if fall:
-            print('fall')
             t = i / 50
             jumpHeight = (2 * t ** 2 - t) * -1 * onbrick
             i += 0.0021629 * RUN_SPEED_PPS
@@ -129,7 +129,6 @@ class Mario:
             moreHigher = 0
         if jump is False:
             keepJump = True
-
 
         if damaged:
             r += 1

@@ -130,14 +130,16 @@ class Life:
         if character.leftLife == 5:
             self.ima5.draw(80, 560)
 
+
 points = 0
+x = 50
+
 
 class Point:
         image = None
 
         def __init__(self):
-            if Point.image == None:
-                self.imageClock = load_image('images/number/clock/clock.png')
+            if Point.image is None:
                 self.image0 = load_image('images/number/clock/w0.png')
                 self.image1 = load_image('images/number/clock/w1.png')
                 self.image2 = load_image('images/number/clock/w2.png')
@@ -151,10 +153,74 @@ class Point:
 
         def update(self):
             global points
-
+            if points > 100:
+                points = 0
+                character.leftLife += 1
             pass
 
         def draw(self):
-            global points
-
-            pass
+            global points ,x
+            if str(points)[0] == str(0):
+                self.image0.draw(x, 500)
+            elif str(points)[0] == str(1):
+                self.image1.draw(x, 500)
+            elif str(points)[0] == str(2):
+                self.image2.draw(x, 500)
+            elif str(points)[0] == str(3):
+                self.image3.draw(x, 500)
+            elif str(points)[0] == str(4):
+                self.image4.draw(x, 500)
+            elif str(points)[0] == str(5):
+                self.image5.draw(x, 500)
+            elif str(points)[0] == str(6):
+                self.image6.draw(x, 500)
+            elif str(points)[0] == str(7):
+                self.image7.draw(x, 500)
+            elif str(points)[0] == str(8):
+                self.image8.draw(x, 500)
+            elif str(points)[0] == str(9):
+                self.image9.draw(x, 500)
+            if points < 10:
+                pass
+            elif str(points)[1] == str(0):
+                self.image0.draw(x + 30, 500)
+            elif str(points)[1] == str(1):
+                self.image1.draw(x + 30, 500)
+            elif str(points)[1] == str(2):
+                self.image2.draw(x + 30, 500)
+            elif str(points)[1] == str(3):
+                self.image3.draw(x + 30, 500)
+            elif str(points)[1] == str(4):
+                self.image4.draw(x + 30, 500)
+            elif str(points)[1] == str(5):
+                self.image5.draw(x + 30, 500)
+            elif str(points)[1] == str(6):
+                self.image6.draw(x + 30, 500)
+            elif str(points)[1] == str(7):
+                self.image7.draw(x + 30, 500)
+            elif str(points)[1] == str(8):
+                self.image8.draw(x + 30, 500)
+            elif str(points)[1] == str(9):
+                self.image9.draw(x + 30, 500)
+            if points < 100:
+                pass
+            elif str(points)[2] == str(0):
+                self.image0.draw(x + 60, 500)
+            elif str(points)[2] == str(1):
+                self.image1.draw(x + 60, 500)
+            elif str(points)[2] == str(2):
+                self.image2.draw(x + 60, 500)
+            elif str(points)[2] == str(3):
+                self.image3.draw(x + 60, 500)
+            elif str(points)[2] == str(4):
+                self.image4.draw(x + 60, 500)
+            elif str(points)[2] == str(5):
+                self.image5.draw(x + 60, 500)
+            elif str(points)[2] == str(6):
+                self.image6.draw(x + 60, 500)
+            elif str(points)[2] == str(7):
+                self.image7.draw(x + 60, 500)
+            elif str(points)[2] == str(8):
+                self.image8.draw(x + 60, 500)
+            elif str(points)[2] == str(9):
+                self.image9.draw(x + 60, 500)
