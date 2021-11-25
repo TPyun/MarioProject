@@ -14,6 +14,7 @@ from ui import Life
 from ui import Point
 from terrain import Ground
 from terrain import Brick
+from terrain import ShortGround
 from background import Background
 from background import Bgm
 from terrain import Coin
@@ -40,6 +41,23 @@ allmonsters = []
 allbricks = []
 allcoins = []
 
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    return True
+
+
+def onlyleftright_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a + 8 > right_b: return False
+    if right_a < left_b + 8: return False
+    return True
 
 def mario_feet_collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_mariofeetpos()
@@ -117,7 +135,6 @@ def mario_feet_brickout2_collide(a, b):
     if top_a < bottom_b: return False
     if bottom_a > top_b: return False
     return True
-
 
 
 def enter():
@@ -211,6 +228,10 @@ def enter():
     background = Background()
     game_world.add_object(background, 0)
 
+    global sg
+    sg = ShortGround()
+    game_world.add_object(sg, 1)
+
     global allcoins
     allcoins = [Coin() for i in range(3)]
     game_world.add_objects(allcoins, 1)
@@ -255,11 +276,13 @@ i = 0
 r = 0
 t = 0
 z = 0
+a = 0
+b = 0
 onbrick = False
 
 
 def update():
-    global damaged, i, r, onbrick, t, z
+    global damaged, i, r, onbrick, t, z, a, b
     for game_object in game_world.all_objects():
         game_object.update()
 
@@ -285,6 +308,25 @@ def update():
             character.damaged = False
             i = 0
             r = 0
+
+        if collide(sg, monsters) and a == 0:
+            if onlyleftright_collide(sg, monsters):
+                print('1111', character.velocity, character.stopSide)
+                if character.velocity < 0 or character.stopSide < 0:
+                    monsters.x = random.randint(character.realXLocation // 1 + 1000,
+                                                character.realXLocation // 1 + 1800)
+                    print('------------')
+                elif character.velocity > 0 or character.stopSide > 0:
+                    monsters.x = random.randint(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400)
+                    print('+++++++++++++++')
+            monsters.velocity *= -1
+            a = 2
+        if a == 2:
+            b += 1
+        if b > 30:
+            a = 0
+            b = 0
+
 
     for bricks in allbricks:
         if mario_feet_collide(mario, bricks) and character.i > 1:
@@ -329,11 +371,15 @@ def update():
     for coins in allcoins:
         if mario_side_collide(mario, coins):
             ui.points += 5
+            bgm.coinsound.play()
             if character.velocity < 0 or character.stopSide < 0:
                 coins.x = random.randrange(character.realXLocation // 1 + 1000, character.realXLocation // 1 + 1800, 50)
 
             if character.velocity > 0 or character.stopSide > 0:
                 coins.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
+
+    if mario_feet_collide(mario, sg):
+        pass
 
 
 def draw():

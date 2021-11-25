@@ -159,7 +159,7 @@ class Point:
             pass
 
         def draw(self):
-            global points ,x
+            global points, x
             if str(points)[0] == str(0):
                 self.image0.draw(x, 500)
             elif str(points)[0] == str(1):

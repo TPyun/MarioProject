@@ -24,13 +24,13 @@ class Bgm:
     def __init__(self):
         self.marioWav = load_wav('sound/Mario.wav')
         self.jumpWav = load_wav('sound/jump.wav')
+        self.coinsound = load_wav('sound/eatmoney.wav')
         if character.running is True:
             self.marioWav.play()
 
     def update(self):
         if character.jump is True and character.jumpHeight == 0:
             self.jumpWav.play()
-        # print(character.jump, character.jumpHeight)
         pass
 
     def draw(self):

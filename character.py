@@ -11,8 +11,6 @@ RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-
-
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 21
@@ -96,25 +94,28 @@ class Mario:
         charDir = clamp(-1, -1 * velocity, 1)  # -1이면 왼쪽으로 +1이면 오른쪽 방향으로 움직인다.
 
         if jump:
-            fall = False
-            t = i / 50
-            if onbrick == 0:
-                jumpHeight = (-4 * t ** 2 + 4 * t) * (highestJumpHeight + moreHigher) + (2 * t ** 2 - t) * 0  # 마지막 groundHeight 만약 사물이 있을 경우에는 이걸로 안됨
-            else:
-                jumpHeight = (-4 * t ** 2 + 4 * t) * (highestJumpHeight + moreHigher) + (2 * t ** 2 - t) * -1 * (onbrick)  # 마지막 groundHeight 만약 사물이 있을 경우에는 이걸로 안됨
-            i += 0.0021629 * RUN_SPEED_PPS
-            i -= 0.001 * moreHigher
-            if keepJump is True:
-                moreHigher += 0.010811 * RUN_SPEED_PPS
-                # 더 점프할 시 하강속도 문제로 i 강제로 줄임
-            else:
-                pass
+            if fall is False:
+                t = i / 50
+                if onbrick == 0:
+                    jumpHeight = (-4 * t ** 2 + 4 * t) * (highestJumpHeight + moreHigher) + (
+                                2 * t ** 2 - t) * 0 # 마지막 groundHeight 만약 사물이 있을 경우에는 이걸로 안됨
+                else:
+                    jumpHeight = (-4 * t ** 2 + 4 * t) * (highestJumpHeight + moreHigher) + (2 * t ** 2 - t) * -1 * (
+                        onbrick)  # 마지막 groundHeight 만약 사물이 있을 경우에는 이걸로 안됨
+                i += 0.0021629 * RUN_SPEED_PPS
+                i -= 0.001 * moreHigher
+                if keepJump is True:
+                    moreHigher += 0.010811 * RUN_SPEED_PPS
+                    # 더 점프할 시 하강속도 문제로 i 강제로 줄임
+                else:
+                    pass
 
         if fall:
-            t = i / 50
+            t = (i + 25) / 50
             jumpHeight = (2 * t ** 2 - t) * -1 * onbrick
             i += 0.0021629 * RUN_SPEED_PPS
-            if i > 50:
+            keepJump = True
+            if i > 25:
                 fall = False
                 onbrick = 0
                 jumpHeight = 0
@@ -144,12 +145,12 @@ class Mario:
             self.imageR.opacify(0)
             self.imageStandR.opacify(0)
             self.imageStandL.opacify(0)
+
         elif damaged is True and r % 20 > 10:
             self.imageL.opacify(1)
             self.imageR.opacify(1)
             self.imageStandR.opacify(1)
             self.imageStandL.opacify(1)
-        print(jump, fall, i, jumpHeight, onbrick, moreHigher)
 
     def draw(self):
         global frame, characterAniSpeed, x, leftEndMove, leftEnd, velocity, charDir, onbrick
@@ -168,9 +169,6 @@ class Mario:
 
         frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION # 마리오 사진 넘기기
 
-        # if monsters.Monster().stuckwith:
-        #     frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 40
-        # print(monsters.Monster().stuckwith)
         x += velocity * game_framework.frame_time
 
         if x < 0:  # 왼쪽 끝으로 가면 배경이 멈추고 캐릭터가 직접 움직인다
