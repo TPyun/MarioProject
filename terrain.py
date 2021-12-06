@@ -2,6 +2,7 @@ import character
 import monsters
 import random
 from pico2d import *
+import title_state
 
 buildLocation = 0
 plus = 0
@@ -11,7 +12,7 @@ class Ground:
     image = None
 
     def __init__(self):
-        if Ground.image == None:
+        if Ground.image is None:
             self.groundLong = load_image('images/groundLong.png')
 
     def update(self):
@@ -33,7 +34,7 @@ class Ground:
 class ShortGround:
     def __init__(self):
         self.image = load_image('images/hole.png')
-        self.x, self.y = random.randrange(300, 2300, 100), 30
+        self.x, self.y = random.randrange(1000, 2300, 100), 30
         pass
 
     def update(self):
@@ -46,17 +47,17 @@ class ShortGround:
         pass
 
     def get_bb(self):
-        return self.x - character.realXLocation - 60 + character.leftEndMove, self.y - 50, self.x - character.realXLocation + character.leftEndMove + 60, self.y + 36
+        return self.x - character.realXLocation - 40 + character.leftEndMove, self.y - 50, self.x - character.realXLocation + character.leftEndMove + 40, self.y + 36
 
 
 class Brick:
     image = None
 
     def __init__(self):
-        if Brick.image == None:
+        if Brick.image is None:
             self.image = load_image('images/wall/normalwall.png')  # 50*50
             self.imageabnormal = load_image('images/wall/abnormalwall.png')
-            self.x, self.y = random.randrange(300, 2300, 50), random.randrange(200, 400, 50)
+            self.x, self.y = random.randrange(900, 2300, 50), random.randrange(200, 400, 50)
             self.abnormal = random.randint(0, 9)
 
     def update(self):
@@ -106,22 +107,29 @@ class Coin:
             self.x = random.randrange(character.realXLocation // 1 - 1000, character.realXLocation // 1 - 400, 50)
 
     def draw(self):
-        self.ima.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
+        self.ima.draw(self.x - character.realXLocation + character.leftEndMove, self.y, 30, 30)
         draw_rectangle(*self.get_bb())
         pass
 
     def get_bb(self):
-        return self.x - character.realXLocation - 20 + character.leftEndMove, self.y - 20, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 20
+        return self.x - character.realXLocation - 15 + character.leftEndMove, self.y - 15, self.x - character.realXLocation + character.leftEndMove + 15, self.y + 15
 
 
 class Goal:
     def __init__(self):
-        self.ima = load_image('images/final.png')
-        self.ima1 = load_image('images/tower.png')
-        pass
+        self.ima = load_image('images/destination.png')
+        self.ima1 = load_image('images/flag.png')
+        self.x = 0
 
     def update(self):
+        self.x = title_state.wave * 1000 - character.realXLocation + character.leftEndMove
         pass
 
     def draw(self):
+        self.ima.draw(self.x, 365)
+        self.ima1.draw(self.x - 368, 340)
+        draw_rectangle(*self.get_bb())
         pass
+
+    def get_bb(self):
+        return self.x - 325 - 10, 90, self.x - 325 + 10, 370

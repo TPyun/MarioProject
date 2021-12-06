@@ -1,3 +1,4 @@
+import character
 import main_state
 import game_framework
 from pico2d import *
@@ -86,15 +87,19 @@ def draw():
 
         if difficulty == 1:
             easy.draw(400, 300)
+            character.leftLife = 5
 
         if difficulty == 2:
             normal.draw(400, 300)
+            character.leftLife = 4
 
         if difficulty == 3:
             hard.draw(400, 300)
+            character.leftLife = 3
 
         if difficulty == 4:
             hell.draw(400, 300)
+            character.leftLife = 2
 
         btnup.draw(110, 430)
         btndown.draw(110, 320)
@@ -151,7 +156,14 @@ def update():
         wave = 1
 
     if click is True and 150 < x < 550 and 490 < y < 550:
+        btnsound.play()
         game_framework.change_state(main_state)
+        character.realXLocation = 0
+        character.leftEndMove = 0
+        character.stopSide = 1
+        character.velocity = 0
+        character.x = 0
+        character.jumpHeight = 0
     click = False
 
 

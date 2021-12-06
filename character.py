@@ -84,6 +84,7 @@ class Mario:
         self.imageStandR = load_image('images/standR.png')
         self.imageL = load_image('images/marioAniLeft1.png')
         self.imageR = load_image('images/marioAniRight1.png')
+
         self.imageStandR.draw(300, groundHeight + jumpHeight)
         self.frame = 0
         self.i = 0
@@ -152,8 +153,12 @@ class Mario:
             self.imageStandR.opacify(1)
             self.imageStandL.opacify(1)
 
+
+
+
     def draw(self):
-        global frame, characterAniSpeed, x, leftEndMove, leftEnd, velocity, charDir, onbrick
+        global leftLife
+        global frame, x, leftEndMove, leftEnd, velocity, charDir, onbrick
 
         if charDir == 1:
             self.imageR.clip_draw(int(frame) * 60, 0, 56, 70, 300 + leftEndMove, 100 + jumpHeight + onbrick, 56, 70)  # 숫자 5번째에 300으로 한 이유는 마리오의 위치 고정
@@ -167,6 +172,8 @@ class Mario:
         elif stopSide == -1 and charDir == 0:
             self.imageStandL.draw(300 + leftEndMove, 100 + jumpHeight + onbrick, 56, 70)
 
+
+
         frame = (frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION # 마리오 사진 넘기기
 
         x += velocity * game_framework.frame_time
@@ -179,6 +186,7 @@ class Mario:
             if leftEndMove < -280:
                 leftEndMove += 3
                 x -= 3
+
         draw_rectangle(*self.get_sidepos())
         draw_rectangle(*self.get_marioheadpos())
         draw_rectangle(*self.get_mariofeetpos())
