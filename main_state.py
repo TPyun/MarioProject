@@ -340,7 +340,6 @@ def update():
             character.leftLife = 0
 
     if mario_side_collide(mario, goal):
-        ui.points += 50
         character.ingoal = True
         character.jump = False
         character.jumpHeight -= 3

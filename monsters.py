@@ -24,15 +24,12 @@ stuckwith = False
 
 
 class Monster:
-    image = None
-
     def __init__(self):
         self.velocity = 0
         self.x, self.y = random.randint(1000, 1900), 95
         self.frame = 0
-        if Monster.image is None:
-            self.ima = load_image('images/turtle.png')
-            self.ima1 = load_image('images/monsterL.png')
+        self.ima = load_image('images/turtle.png')
+        self.ima1 = load_image('images/monsterL.png')
         self.velocity -= RUN_SPEED_PPS
         self.dir = 0
         self.i = 0
