@@ -15,7 +15,7 @@ class TimeUi:
     image = None
 
     def __init__(self):
-        if TimeUi.image == None:
+        if TimeUi.image is None:
             self.imageClock = load_image('images/number/clock/clock.png')
             self.image0 = load_image('images/number/clock/w0.png')
             self.image1 = load_image('images/number/clock/w1.png')

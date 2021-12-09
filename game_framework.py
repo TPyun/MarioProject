@@ -1,4 +1,3 @@
-import hint
 import time
 frame_time = 0.0
 
@@ -90,7 +89,6 @@ def run(start_state):
     global frame_time
     current_time = time.time()
     while running:
-        hint.show()
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()

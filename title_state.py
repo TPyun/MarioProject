@@ -1,6 +1,8 @@
 import character
 import main_state
 import game_framework
+import ui
+import terrain
 from pico2d import *
 
 
@@ -36,7 +38,7 @@ def enter():
     i7 = load_image('images/number/clock/w7.png')
     i8 = load_image('images/number/clock/w8.png')
     i9 = load_image('images/number/clock/w9.png')
-    ready = load_image('images/ready-1.png')
+    ready = load_image('images/ready1.png')
     howlong = load_image('images/howlong.png')
     easy = load_image('images/easy.png')
     normal = load_image('images/normal.png')
@@ -163,7 +165,25 @@ def update():
         character.stopSide = 1
         character.velocity = 0
         character.x = 0
+        character.ingoal = False
+        character.characterAniSpeed = 1  # 캐릭터 애니 사진 넘어가는 속도 변수
+        character.frame = 0  # 캐릭터 애니사진 파일 움직이기 위한 용도
+        character.jump = False
         character.jumpHeight = 0
+        character.highestJumpHeight = 100
+        character.i = 0
+        character.groundHeight = 100
+        character.moreHigher = 0
+        character.leftEnd = False
+        character.leftLife = 5
+        character.damaged = None
+        character.r = 0
+        character.onbrick = 0
+        character.fall = False
+        character.goalMove = 0
+        ui.setTime = 250
+        terrain.buildLocation = 0
+        terrain.plus = 0
     click = False
 
 

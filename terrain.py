@@ -23,12 +23,9 @@ class Ground:
             plus = (character.realXLocation // 3000 + 1) * 3000 # plus는 그림이 끝나면 옮겨야하는 차이값
 
     def draw(self):
-        if character.leftEnd is False:
-            self.groundLong.draw(buildLocation - 3000, 30)
-            self.groundLong.draw(buildLocation, 30)
-
-        else:
-            self.groundLong.draw(1500, 30)
+        # if character.leftEndMove is False:
+        self.groundLong.draw(buildLocation - 3000 + character.leftEndMove, 30)
+        self.groundLong.draw(buildLocation + character.leftEndMove, 30)
 
 
 class ShortGround:
@@ -43,7 +40,7 @@ class ShortGround:
 
     def draw(self):
         self.image.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         pass
 
     def get_bb(self):
@@ -51,14 +48,11 @@ class ShortGround:
 
 
 class Brick:
-    image = None
-
     def __init__(self):
-        if Brick.image is None:
-            self.image = load_image('images/wall/normalwall.png')  # 50*50
-            self.imageabnormal = load_image('images/wall/abnormalwall.png')
-            self.x, self.y = random.randrange(900, 2300, 50), random.randrange(200, 400, 50)
-            self.abnormal = random.randint(0, 9)
+        self.image = load_image('images/wall/normalwall.png')  # 50*50
+        self.imageabnormal = load_image('images/wall/abnormalwall.png')
+        self.x, self.y = random.randrange(900, 2300, 50), random.randrange(200, 400, 50)
+        self.abnormal = random.randint(0, 9)
 
     def update(self):
         # 마리오 뒤에 땅 있으면 마리오 가는 방향에 다시 스폰
@@ -77,9 +71,9 @@ class Brick:
             self.image.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
         else:
             self.imageabnormal.draw(self.x - character.realXLocation + character.leftEndMove, self.y)
-        draw_rectangle(*self.get_bb())
-        draw_rectangle(*self.get_bb_out1())
-        draw_rectangle(*self.get_bb_out2())
+        # draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb_out1())
+        # draw_rectangle(*self.get_bb_out2())
 
     def get_bb(self):
         return self.x - character.realXLocation + character.leftEndMove - 25, self.y - 25, self.x - character.realXLocation + character.leftEndMove + 25, self.y + 25
@@ -108,7 +102,7 @@ class Coin:
 
     def draw(self):
         self.ima.draw(self.x - character.realXLocation + character.leftEndMove, self.y, 30, 30)
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         pass
 
     def get_bb(self):
@@ -119,17 +113,25 @@ class Goal:
     def __init__(self):
         self.ima = load_image('images/destination.png')
         self.ima1 = load_image('images/flag.png')
-        self.x = 0
+        self.x, self.y = 0, 0
 
     def update(self):
-        self.x = title_state.wave * 1000 - character.realXLocation + character.leftEndMove
-        pass
+        self.x = title_state.wave * 4000 - character.realXLocation + character.leftEndMove
+
+        if character.ingoal:
+            self.y -= 3
+            if character.jumpHeight == 0:
+                self.y += 3
 
     def draw(self):
         self.ima.draw(self.x, 365)
-        self.ima1.draw(self.x - 368, 340)
-        draw_rectangle(*self.get_bb())
+        self.ima1.draw(self.x - 368, 340 + self.y)
+        # draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb1())
         pass
 
     def get_bb(self):
         return self.x - 325 - 10, 90, self.x - 325 + 10, 370
+
+    def get_bb1(self):
+        return self.x - 325 - 500, -10, self.x + 700, 370

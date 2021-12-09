@@ -61,24 +61,24 @@ class Monster:
     def draw(self):
         if self.species == 0:
             if self.dir == -1:
-                self.ima.clip_draw(int(self.frame) * 51, 0, 50, 60, self.x - character.realXLocation + character.leftEndMove, self.y)
+                self.ima.clip_draw(int(self.frame) * 51, 0, 48, 60, self.x - character.realXLocation + character.leftEndMove, self.y)
             else:
-                self.ima.clip_composite_draw(int(self.frame) * 51, 0, 50, 60, 0, 'h', self.x - character.realXLocation + character.leftEndMove, self.y, 50, 60)
+                self.ima.clip_composite_draw(int(self.frame) * 51, 0, 48, 60, 0, 'h', self.x - character.realXLocation + character.leftEndMove, self.y, 50, 60)
         else:
             if self.dir == -1:
                 self.ima1.clip_draw(int(self.frame) * 51, 0, 50, 60, self.x - character.realXLocation + character.leftEndMove, self.y)
             else:
                 self.ima1.clip_composite_draw(int(self.frame) * 51, 0, 50, 60, 0, 'h', self.x - character.realXLocation + character.leftEndMove, self.y, 50, 60)
 
-        draw_rectangle(*self.get_monster_head())
-        draw_rectangle(*self.get_monster_body_pos())
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_monster_head())
+        # draw_rectangle(*self.get_monster_body_pos())
+        # draw_rectangle(*self.get_bb())
 
     def get_monster_body_pos(self):
-        return self.x - character.realXLocation + character.leftEndMove - 20, self.y - 20, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 15
+        return self.x - character.realXLocation + character.leftEndMove - 20, self.y - 20, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 5
 
     def get_monster_head(self):
-        return self.x - character.realXLocation + character.leftEndMove - 15, self.y + 15, self.x - character.realXLocation + character.leftEndMove + 15, self.y + 20
+        return self.x - character.realXLocation + character.leftEndMove - 20, self.y + 5, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 20
 
     def get_bb(self):
         return self.x - character.realXLocation + character.leftEndMove - 20, self.y - 30, self.x - character.realXLocation + character.leftEndMove + 20, self.y + 20
